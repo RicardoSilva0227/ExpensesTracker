@@ -1,47 +1,47 @@
 ﻿using ExpenseTrackerAPI.Models;
 using ExpenseTrackerAPI.Models.Dto;
+using ExpenseTrackerAPI.Services;
 using ExpenseTrackerAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text.Json;
 
 namespace ExpenseTrackerAPI.Controllers
 {
-    [Route("api/Expenses")]
+    [Route("api/ExpensesTypes")]
     [ApiController]
-    public class ExpenseController : Controller
+    public class ExpenseTypeController : Controller
     {
-        private readonly IExpenseService _expensesService;
+        private readonly IExpenseTypeService _expensesTypeService;
         protected APIResponse _response;
 
-        public ExpenseController(IExpenseService expensesService)
+        public ExpenseTypeController(IExpenseTypeService expenseTypeService)
         {
-            _expensesService = expensesService;
+            _expensesTypeService = expenseTypeService;
             _response = new();
         }
 
-        #region Get Expenses
+        #region Get ExpensesTypes
         /// <summary>
-        /// Get All Expenses
+        /// Get All ExpensesTypes
         /// </summary>
         /// <param name="pageSize"></param>
         /// <param name="pageNumber"></param>
         /// <returns></returns>
-        [HttpGet, Route("GetAllExpenses")]
+        [HttpGet, Route("GetAllExpenseTypes")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<APIResponse>> GetExpenses(int pageSize = 0, int pageNumber = 1)
+        public async Task<ActionResult<APIResponse>> GetExpenseTypes(int pageSize = 0, int pageNumber = 1)
         {
             try
             {
-                IEnumerable<Expense> expenseList;
-                expenseList = await _expensesService.GetAllAsync();
+                IEnumerable<ExpenseType> expenseTypeList;
+                expenseTypeList = await _expensesTypeService.GetAllAsync();
 
                 Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
-                Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagination));
-                _response.result = expenseList;
+                Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(pagination));
+                _response.result = expenseTypeList;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -51,19 +51,19 @@ namespace ExpenseTrackerAPI.Controllers
                 _response.ErrorMessages = new List<string> { ex.Message };
             }
             return _response;
-        }        
-       
+        }
+
         /// <summary>
-        /// Get One Expense
+        /// Get One ExpenseType
         /// </summary>
-        /// <param name="id"> Id of the expense</param>
+        /// <param name="id"> Id of the expensesType</param>
         /// <returns></returns>
-        [HttpGet, Route("GetExpense")]
+        [HttpGet, Route("GetExpenseType")]
         //[Authorize]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExpenseDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetExpense(int id)
+        public async Task<ActionResult<APIResponse>> GetExpenseType(int id)
         {
             try
             {
@@ -73,15 +73,15 @@ namespace ExpenseTrackerAPI.Controllers
                     return BadRequest(_response);
                 }
 
-                var expense = _expensesService.GetAsync(d => d.Id == id);
+                var expensesType = _expensesTypeService.GetAsync(d => d.Id == id);
 
-                if (expense == null)
+                if (expensesType == null)
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;
                     return NotFound(_response);
                 }
 
-                _response.result = expense;
+                _response.result = expensesType;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -95,35 +95,35 @@ namespace ExpenseTrackerAPI.Controllers
 
         #endregion
 
-        #region Create Expense
-        [HttpPost, Route("CreateExpense")]
+        #region Create ExpenseType
+        [HttpPost, Route("CreateExpenseType")]
         //[Authorize]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> CreateExpense([FromBody] Expense expense)
+        public async Task<ActionResult<APIResponse>> CreateExpenseType([FromBody] ExpenseType expensesType)
         {
             try
             {
-                if (expense == null)
+                if (expensesType == null)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     return BadRequest(_response);
                 }
 
-                var existingExpense = await _expensesService.GetAsync(e => e.Code == expense.Code);
+                var existingExpense = await _expensesTypeService.GetAsync(e => e.Code == expensesType.Code);
                 if (existingExpense != null)
                 {
                     _response.StatusCode = HttpStatusCode.Conflict; // 409 Conflict
-                    _response.ErrorMessages = new List<string> { "Expense with the same Code already exists." };
+                    _response.ErrorMessages = new List<string> { "ExpenseType with the same Code already exists." };
                     return Conflict(_response);
                 }
 
-                // Add the new expense
-                await _expensesService.CreateAsync(expense);
-                await _expensesService.SaveAsync();
+                // Add the new expensesType
+                await _expensesTypeService.CreateAsync(expensesType);
+                await _expensesTypeService.SaveAsync();
 
-                _response.result = expense;
+                _response.result = expensesType;
                 _response.StatusCode = HttpStatusCode.Created;
                 return Ok();
             }
@@ -138,12 +138,12 @@ namespace ExpenseTrackerAPI.Controllers
         #endregion
 
         #region Delete
-        [HttpDelete, Route("DeleteExpense")]
+        [HttpDelete, Route("DeleteExpenseType")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         //[Authorize(Roles = "admin")]
-        public async Task<ActionResult<APIResponse>> DeleteExpense(int id)
+        public async Task<ActionResult<APIResponse>> DeleteExpenseType(int id)
         {
             try
             {
@@ -153,14 +153,14 @@ namespace ExpenseTrackerAPI.Controllers
                     return BadRequest(_response);
                 }
 
-                var expense = await _expensesService.GetAsync(d => d.Id == id);
-                if (expense == null)
+                var expensesType = await _expensesTypeService.GetAsync(d => d.Id == id);
+                if (expensesType == null)
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;
                     return NotFound(_response);
                 }
 
-                _expensesService.DeleteAsync(expense);
+                 await _expensesTypeService.DeleteAsync(expensesType);
                 _response.StatusCode = HttpStatusCode.NoContent;
                 _response.IsSuccess = true;
                 return Ok(_response);
@@ -175,21 +175,21 @@ namespace ExpenseTrackerAPI.Controllers
         #endregion
 
         #region Update
-        [HttpPut, Route("UpdateExpense")]
+        [HttpPut, Route("UpdateExpenseType")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         //[Authorize(Roles = "admin")]
-        public async Task<ActionResult<APIResponse>> UpdateExpense(int id, [FromBody] Expense expense)
+        public async Task<ActionResult<APIResponse>> UpdateExpenseType(int id, [FromBody] ExpenseType expensesType)
         {
             try
             {
-                if (expense == null || id != expense.Id)
+                if (expensesType == null || id != expensesType.Id)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     return BadRequest(_response);
-                }                
+                }
 
-                await _expensesService.UpdateAsync(expense);
+                await _expensesTypeService.UpdateAsync(expensesType);
                 _response.StatusCode = HttpStatusCode.NoContent;
                 _response.IsSuccess = true;
                 return Ok(_response);
@@ -202,6 +202,5 @@ namespace ExpenseTrackerAPI.Controllers
             return _response;
         }
         #endregion
-    
     }
 }
