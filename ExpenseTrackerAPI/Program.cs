@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add connection string from appsettings.json
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 // Register DbContext with SQL Server
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -27,6 +28,19 @@ builder.Services.AddScoped<IExpenseTypeService, ExpenseTypeService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// needs this for angular requests
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200") // Adjust based on your frontend URL
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
+                  .AllowCredentials();
+        });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -35,6 +49,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// needs to use it globally
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 
