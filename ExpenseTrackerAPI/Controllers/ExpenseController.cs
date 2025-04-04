@@ -111,6 +111,9 @@ namespace ExpenseTrackerAPI.Controllers
                     return BadRequest(_response);
                 }
 
+                expense.Code = Guid.NewGuid().ToString(); // brainstorm how to make a code.
+
+                // check how to make this more reliable
                 var existingExpense = await _expensesService.GetAsync(e => e.Code == expense.Code);
                 if (existingExpense != null)
                 {
@@ -125,7 +128,7 @@ namespace ExpenseTrackerAPI.Controllers
 
                 _response.result = expense;
                 _response.StatusCode = HttpStatusCode.Created;
-                return Ok();
+                return Ok(_response);
             }
             catch (Exception ex)
             {
