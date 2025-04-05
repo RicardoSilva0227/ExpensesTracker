@@ -1,6 +1,9 @@
 ﻿using ExpenseTrackerAPI.Data;
 using ExpenseTrackerAPI.Models;
 using ExpenseTrackerAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace ExpenseTrackerAPI.Services
 {
@@ -13,9 +16,28 @@ namespace ExpenseTrackerAPI.Services
             _appDbContext = appDbContext;
         }
 
-        public Task<Expense> UpdateAsync(Expense entity)
+        // need to alter this later for a less mistake prone version
+        public async Task<Expense> CheckExpenseDuplicate(Expense expense)
         {
-            throw new NotImplementedException();
+            return await _appDbContext.Set<Expense>().FirstOrDefaultAsync(e => e.Title == expense.Title &&
+                            e.Amount == expense.Amount &&
+                            e.DateOfEmission.Value.Date == expense.DateOfEmission.Value.Date);
+        }
+
+        public async Task<Expense> UpdateAsync(int id, Expense entity)
+        {
+            var existingExpense = await _appDbContext.Expenses.FirstOrDefaultAsync(e => e.Id == id);
+            if (existingExpense == null)
+                return null;
+
+            existingExpense.Title = entity.Title;
+            existingExpense.Amount = entity.Amount;
+            existingExpense.DateOfEmission = entity.DateOfEmission;
+            existingExpense.ExpenseTypeId = entity.ExpenseTypeId;
+
+            await _appDbContext.SaveChangesAsync();
+            return existingExpense;
+
         }
     }
 }

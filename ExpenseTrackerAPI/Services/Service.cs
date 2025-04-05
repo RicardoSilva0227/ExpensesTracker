@@ -31,13 +31,22 @@ namespace ExpenseTrackerAPI.Services
             await SaveAsync();
         }
 
-        public async Task<List<T>> GetAllAsync(int pageSize = 10, int pageNumber = 1)
+        public async Task<List<T>> GetAllAsync(int pageSize = 10, int pageNumber = 1, params Expression<Func<T, object>>[] includes)
         {
-            return await _appDbContext.Set<T>()
-                .OrderBy(e => EF.Property<DateTime>(e, "DateOfCreation"))
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+
+            IQueryable<T> query = _appDbContext.Set<T>();
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            return await query.OrderBy(e => EF.Property<DateTime>(e, "DateOfCreation"))
+                        .Skip((pageNumber - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToListAsync();
         }
 
         public async Task<T> GetAsync(Expression<Func<T, bool>> filter)

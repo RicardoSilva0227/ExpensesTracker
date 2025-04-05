@@ -37,7 +37,7 @@ namespace ExpenseTrackerAPI.Controllers
             try
             {
                 IEnumerable<Expense> expenseList;
-                expenseList = await _expensesService.GetAllAsync();
+                expenseList = await _expensesService.GetAllAsync(pageSize, pageNumber, e => e.ExpenseType);
 
                 Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
                 Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagination));
@@ -58,8 +58,8 @@ namespace ExpenseTrackerAPI.Controllers
         /// </summary>
         /// <param name="id"> Id of the expense</param>
         /// <returns></returns>
-        [HttpGet, Route("GetExpense")]
         //[Authorize]
+        [HttpGet, Route("GetExpense")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExpenseDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -73,7 +73,7 @@ namespace ExpenseTrackerAPI.Controllers
                     return BadRequest(_response);
                 }
 
-                var expense = _expensesService.GetAsync(d => d.Id == id);
+                var expense = await _expensesService.GetAsync(d => d.Id == id);
 
                 if (expense == null)
                 {
@@ -111,12 +111,15 @@ namespace ExpenseTrackerAPI.Controllers
                     return BadRequest(_response);
                 }
 
-                var existingExpense = await _expensesService.GetAsync(e => e.Code == expense.Code);
+                expense.Code = Guid.NewGuid().ToString(); // brainstorm how to make a code.
+
+                var existingExpense = await _expensesService.CheckExpenseDuplicate(expense);
+
                 if (existingExpense != null)
                 {
                     _response.StatusCode = HttpStatusCode.Conflict; // 409 Conflict
-                    _response.ErrorMessages = new List<string> { "Expense with the same Code already exists." };
-                    return Conflict(_response);
+                    _response.ErrorMessages = new List<string> { "Expense already exists." };
+                    return BadRequest(_response);
                 }
 
                 // Add the new expense
@@ -125,7 +128,7 @@ namespace ExpenseTrackerAPI.Controllers
 
                 _response.result = expense;
                 _response.StatusCode = HttpStatusCode.Created;
-                return Ok();
+                return Ok(_response);
             }
             catch (Exception ex)
             {
@@ -189,10 +192,19 @@ namespace ExpenseTrackerAPI.Controllers
                     return BadRequest(_response);
                 }                
 
-                await _expensesService.UpdateAsync(expense);
-                _response.StatusCode = HttpStatusCode.NoContent;
-                _response.IsSuccess = true;
-                return Ok(_response);
+                if (await _expensesService.UpdateAsync(id, expense) != null)
+                {
+                    _response.StatusCode = HttpStatusCode.NoContent;
+                    _response.IsSuccess = true;
+                    return Ok(_response);
+                }
+                else
+                {
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages = new List<string> { "Expense not found." };
+                    return NotFound(_response);
+                }
             }
             catch (Exception ex)
             {
