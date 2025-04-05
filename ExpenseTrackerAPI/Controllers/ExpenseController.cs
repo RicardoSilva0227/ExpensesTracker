@@ -192,10 +192,19 @@ namespace ExpenseTrackerAPI.Controllers
                     return BadRequest(_response);
                 }                
 
-                await _expensesService.UpdateAsync(expense);
-                _response.StatusCode = HttpStatusCode.NoContent;
-                _response.IsSuccess = true;
-                return Ok(_response);
+                if (await _expensesService.UpdateAsync(id, expense) != null)
+                {
+                    _response.StatusCode = HttpStatusCode.NoContent;
+                    _response.IsSuccess = true;
+                    return Ok(_response);
+                }
+                else
+                {
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages = new List<string> { "Expense not found." };
+                    return NotFound(_response);
+                }
             }
             catch (Exception ex)
             {

@@ -15,7 +15,7 @@ namespace ExpenseTrackerAPI.Models
         /// <summary>
         /// Code of the invoice. It is created using the id, type of expense and date of emission
         /// </summary>
-        public required string Code { get; set; } = Guid.NewGuid().ToString();
+        public string Code { get; set; }
         /// <summary>
         /// "Name of the expense" like vodafone net or Componente GLOBALDATA
         /// </summary>
