@@ -37,7 +37,7 @@ namespace ExpenseTrackerAPI.Controllers
             try
             {
                 IEnumerable<Expense> expenseList;
-                expenseList = await _expensesService.GetAllAsync();
+                expenseList = await _expensesService.GetAllAsync(pageSize, pageNumber, e => e.ExpenseType);
 
                 Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
                 Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagination));
@@ -58,8 +58,8 @@ namespace ExpenseTrackerAPI.Controllers
         /// </summary>
         /// <param name="id"> Id of the expense</param>
         /// <returns></returns>
-        [HttpGet, Route("GetExpense")]
         //[Authorize]
+        [HttpGet, Route("GetExpense")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExpenseDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -73,7 +73,7 @@ namespace ExpenseTrackerAPI.Controllers
                     return BadRequest(_response);
                 }
 
-                var expense = _expensesService.GetAsync(d => d.Id == id);
+                var expense = await _expensesService.GetAsync(d => d.Id == id);
 
                 if (expense == null)
                 {
@@ -113,13 +113,13 @@ namespace ExpenseTrackerAPI.Controllers
 
                 expense.Code = Guid.NewGuid().ToString(); // brainstorm how to make a code.
 
-                // check how to make this more reliable
-                var existingExpense = await _expensesService.GetAsync(e => e.Code == expense.Code);
+                var existingExpense = await _expensesService.CheckExpenseDuplicate(expense);
+
                 if (existingExpense != null)
                 {
                     _response.StatusCode = HttpStatusCode.Conflict; // 409 Conflict
-                    _response.ErrorMessages = new List<string> { "Expense with the same Code already exists." };
-                    return Conflict(_response);
+                    _response.ErrorMessages = new List<string> { "Expense already exists." };
+                    return BadRequest(_response);
                 }
 
                 // Add the new expense
