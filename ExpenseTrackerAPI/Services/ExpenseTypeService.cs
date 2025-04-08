@@ -1,6 +1,7 @@
 ﻿using ExpenseTrackerAPI.Data;
 using ExpenseTrackerAPI.Models;
 using ExpenseTrackerAPI.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTrackerAPI.Services
 {
@@ -13,9 +14,18 @@ namespace ExpenseTrackerAPI.Services
             _appDbContext = appDbContext;
         }
 
-        public Task<ExpenseType> UpdateAsync(ExpenseType entity)
+        public async Task<ExpenseType> UpdateAsync(int id, ExpenseType entity)
         {
-            throw new NotImplementedException();
+            var existingExpenseType = await _appDbContext.ExpenseTypes.FirstOrDefaultAsync(e => e.Id == id);
+            if (existingExpenseType == null)
+                return null;
+
+            existingExpenseType.Code = entity.Code;
+            existingExpenseType.Description = entity.Description;
+            existingExpenseType.Icon = entity.Icon;
+
+            await _appDbContext.SaveChangesAsync();
+            return existingExpenseType;
         }
     }
 }

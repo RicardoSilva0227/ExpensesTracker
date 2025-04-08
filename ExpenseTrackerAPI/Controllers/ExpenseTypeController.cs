@@ -73,7 +73,7 @@ namespace ExpenseTrackerAPI.Controllers
                     return BadRequest(_response);
                 }
 
-                var expensesType = _expensesTypeService.GetAsync(d => d.Id == id);
+                var expensesType = await _expensesTypeService.GetAsync(d => d.Id == id);
 
                 if (expensesType == null)
                 {
@@ -81,6 +81,7 @@ namespace ExpenseTrackerAPI.Controllers
                     return NotFound(_response);
                 }
 
+                _response.IsSuccess = true;
                 _response.result = expensesType;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -101,17 +102,17 @@ namespace ExpenseTrackerAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> CreateExpenseType([FromBody] ExpenseType expensesType)
+        public async Task<ActionResult<APIResponse>> CreateExpenseType([FromBody] ExpenseType model)
         {
             try
             {
-                if (expensesType == null)
+                if (model == null)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     return BadRequest(_response);
                 }
 
-                var existingExpense = await _expensesTypeService.GetAsync(e => e.Code == expensesType.Code);
+                var existingExpense = await _expensesTypeService.GetAsync(e => e.Code == model.Code);
                 if (existingExpense != null)
                 {
                     _response.StatusCode = HttpStatusCode.Conflict; // 409 Conflict
@@ -120,12 +121,12 @@ namespace ExpenseTrackerAPI.Controllers
                 }
 
                 // Add the new expensesType
-                await _expensesTypeService.CreateAsync(expensesType);
+                await _expensesTypeService.CreateAsync(model);
                 await _expensesTypeService.SaveAsync();
 
-                _response.result = expensesType;
+                _response.result = model;
                 _response.StatusCode = HttpStatusCode.Created;
-                return Ok();
+                return Ok(_response);
             }
             catch (Exception ex)
             {
@@ -176,7 +177,7 @@ namespace ExpenseTrackerAPI.Controllers
 
         #region Update
         [HttpPut, Route("UpdateExpenseType")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         //[Authorize(Roles = "admin")]
         public async Task<ActionResult<APIResponse>> UpdateExpenseType(int id, [FromBody] ExpenseType expensesType)
@@ -189,7 +190,20 @@ namespace ExpenseTrackerAPI.Controllers
                     return BadRequest(_response);
                 }
 
-                await _expensesTypeService.UpdateAsync(expensesType);
+                if (await _expensesTypeService.UpdateAsync(id, expensesType) != null)
+                {
+                    _response.StatusCode = HttpStatusCode.OK;
+                    _response.IsSuccess = true;
+                    return Ok(_response);
+                }
+                else
+                {
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages = new List<string> { "Expense not found." };
+                    return NotFound(_response);
+                }
+
                 _response.StatusCode = HttpStatusCode.NoContent;
                 _response.IsSuccess = true;
                 return Ok(_response);
