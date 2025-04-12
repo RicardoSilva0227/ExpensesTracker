@@ -4,6 +4,6 @@ namespace ExpenseTrackerAPI.Services.Interfaces
 {
     public interface IExpenseTypeService : IService<ExpenseType>
     {
-        Task<ExpenseType> UpdateAsync(ExpenseType entity);
+        Task<ExpenseType> UpdateAsync(int id, ExpenseType entity);
     }
 }
