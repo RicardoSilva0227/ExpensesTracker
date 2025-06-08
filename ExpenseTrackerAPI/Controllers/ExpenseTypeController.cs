@@ -139,7 +139,7 @@ namespace ExpenseTrackerAPI.Controllers
         #endregion
 
         #region Delete
-        [HttpDelete, Route("DeleteExpenseType")]
+        [HttpDelete, Route("DeleteExpenseTypes/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
