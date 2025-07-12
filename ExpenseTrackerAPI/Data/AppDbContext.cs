@@ -12,5 +12,6 @@ namespace ExpenseTrackerAPI.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Wallet> wallet { get; set; }
         public DbSet<WalletEntries> walletEntries { get; set; }
+        public DbSet<Configs> Configs { get; set; }
     }
 }
