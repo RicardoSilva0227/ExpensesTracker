@@ -186,11 +186,17 @@ namespace ExpenseTrackerAPI.Controllers
         {
             try
             {
-                if (expense == null || id != expense.Id)
+                if (expense == null)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     return BadRequest(_response);
-                }                
+                }
+
+                if (expense.Tin.ToString().Length != 9)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorMessages = new List<string> { "The nif should be 9 characters!" };
+                }
 
                 if (await _expensesService.UpdateAsync(id, expense) != null)
                 {
