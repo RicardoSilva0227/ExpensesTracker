@@ -17,6 +17,11 @@ namespace ExpenseTrackerAPI.Models
         /// </summary>
         public string Code { get; set; }
         /// <summary>
+        /// Tax Identification Number - NIF
+        /// </summary>
+        [Range(9,9)]
+        public int Tin { get; set; }
+        /// <summary>
         /// "Name of the expense" like vodafone net or Componente GLOBALDATA
         /// </summary>
         [Required]

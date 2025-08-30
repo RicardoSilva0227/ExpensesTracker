@@ -34,6 +34,7 @@ namespace ExpenseTrackerAPI.Services
             existingExpense.Amount = entity.Amount;
             existingExpense.DateOfEmission = entity.DateOfEmission;
             existingExpense.ExpenseTypeId = entity.ExpenseTypeId;
+            existingExpense.Tin = entity.Tin;
 
             await _appDbContext.SaveChangesAsync();
             return existingExpense;
