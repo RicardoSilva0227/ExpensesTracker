@@ -38,6 +38,8 @@ namespace ConfigTrackerAPI.Controllers
                     config = new Configs
                     {
                         UseFtp = false,
+                        UseSmtp = false,
+                        UseFolder = false,
                         EnableMultiCurrency = true,
                         EnableDiscounts = false,
                         Timezone = "UTC",

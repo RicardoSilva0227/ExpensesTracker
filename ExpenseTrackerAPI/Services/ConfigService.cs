@@ -27,6 +27,8 @@ namespace ExpenseTrackerAPI.Services
                 return null;
 
             existingConfigs.UseFtp = entity.UseFtp;
+            existingConfigs.UseSmtp = entity.UseSmtp;
+            existingConfigs.UseFolder = entity.UseFolder;
             existingConfigs.FtpServer = entity.FtpServer;
             existingConfigs.FtpUsername = entity.FtpUsername;
             existingConfigs.FtpPassword = entity.FtpPassword;
@@ -35,6 +37,7 @@ namespace ExpenseTrackerAPI.Services
             existingConfigs.SmtpPort = entity.SmtpPort;
             existingConfigs.SmtpUsername = entity.SmtpUsername;
             existingConfigs.SmtpPassword = entity.SmtpPassword;
+            existingConfigs.FolderAddress = entity.FolderAddress;
             existingConfigs.Timezone = entity.Timezone;
             existingConfigs.DateFormat = entity.DateFormat;
             existingConfigs.EnableMultiCurrency = entity.EnableMultiCurrency;

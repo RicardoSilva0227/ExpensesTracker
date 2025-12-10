@@ -19,6 +19,14 @@ namespace ExpenseTrackerAPI.Models
         [DefaultValue(false)]
         public bool UseFtp { get; set; } = false;
 
+        // SMTP Settings
+        [DefaultValue(false)]
+        public bool UseSmtp { get; set; } = false;
+
+        // FOLDER Settings
+        [DefaultValue(false)]
+        public bool UseFolder { get; set; } = false;
+
         [MaxLength(255)]
         public string? FtpServer { get; set; }
 
@@ -41,6 +49,10 @@ namespace ExpenseTrackerAPI.Models
 
         [MaxLength(255)]
         public string? SmtpPassword { get; set; }
+
+
+        [MaxLength(300)]
+        public string? FolderAddress { get; set; }
 
         // System Settings
         [DefaultValue("UTC")]
