@@ -14,11 +14,13 @@ namespace ExpenseTrackerAPI.Controllers
     public class ExpenseController : Controller
     {
         private readonly IExpenseService _expensesService;
+        private readonly IConfigService _configService;
         protected APIResponse _response;
 
-        public ExpenseController(IExpenseService expensesService)
+        public ExpenseController(IExpenseService expensesService, IConfigService configService)
         {
             _expensesService = expensesService;
+            _configService = configService;
             _response = new();
         }
 
@@ -220,6 +222,45 @@ namespace ExpenseTrackerAPI.Controllers
             return _response;
         }
         #endregion
-    
+
+        #region Imports and Exports
+        public async Task<ActionResult<APIResponse>> ExportToFtp(IFormFile file)
+        {
+            try
+            {
+                var config = _configService.GetFirstOrDefault();
+
+                FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create(new Uri(config.Result.FtpServer));
+                ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
+                ftpRequest.Credentials = new NetworkCredential(config.Result.FtpUsername, config.Result.FtpPassword);
+                ftpRequest.UseBinary = true;
+                ftpRequest.ContentLength = file.Length;
+                ftpRequest.KeepAlive = false;
+                ftpRequest.UseBinary = true;
+                ftpRequest.UsePassive = true;
+                ftpRequest.EnableSsl = true;
+
+                using (Stream request = ftpRequest.GetRequestStream())
+                using (Stream fileStream = file.OpenReadStream())
+                using (FtpWebResponse respose = (FtpWebResponse)ftpRequest.GetResponse())
+                {
+                    await fileStream.CopyToAsync(request);
+                    respose.Close();
+                }
+
+                _response.StatusCode = HttpStatusCode.Continue;
+                _response.IsSuccess = true;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string> { ex.Message };
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
+        #endregion
+
     }
 }

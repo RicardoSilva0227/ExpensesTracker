@@ -16,14 +16,6 @@ namespace ExpenseTrackerAPI.Data
         public DbSet<Currency> Currency { get; set; }
 
 
-
-
-
-
-
-
-
-
         // seed static tables
 
         private static readonly DateTime SeedDate = new DateTime();
