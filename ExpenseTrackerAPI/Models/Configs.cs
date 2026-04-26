@@ -67,6 +67,10 @@ namespace ExpenseTrackerAPI.Models
 
         [DefaultValue(false)]
         public bool EnableDiscounts { get; set; } = false;
+        [DefaultValue(10)]
+        public int DefaultPaginationSize { get; set; }
+        [DefaultValue(1)]
+        public int DefaultExportSetting { get; set; }
 
         // Dates
         [Required]

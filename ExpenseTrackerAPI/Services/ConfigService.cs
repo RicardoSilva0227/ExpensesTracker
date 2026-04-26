@@ -44,6 +44,8 @@ namespace ExpenseTrackerAPI.Services
             existingConfigs.EnableDiscounts = entity.EnableDiscounts;
             existingConfigs.LastUpdated = DateTime.Today;
             existingConfigs.DefaultCurrencyId = entity.DefaultCurrencyId;
+            existingConfigs.DefaultExportSetting = entity.DefaultExportSetting;
+            existingConfigs.DefaultPaginationSize = entity.DefaultPaginationSize;
 
             await _appDbContext.SaveChangesAsync();
             return existingConfigs;

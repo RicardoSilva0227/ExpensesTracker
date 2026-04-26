@@ -42,7 +42,7 @@ namespace ConfigTrackerAPI.Controllers
                         UseFolder = false,
                         EnableMultiCurrency = true,
                         EnableDiscounts = false,
-                        Timezone = "UTC",
+                        Timezone = "UTC+1",
                         DateFormat = "dd/MM/yyyy"
                     };
 
