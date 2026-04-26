@@ -19,7 +19,6 @@ namespace ExpenseTrackerAPI.Models
         /// <summary>
         /// Tax Identification Number - NIF
         /// </summary>
-        [RegularExpression(@"^\d{9}$", ErrorMessage = "TIN must have exactly 9 digits.")]
         public int? Tin { get; set; }
         /// <summary>
         /// "Name of the expense" like vodafone net or Componente GLOBALDATA

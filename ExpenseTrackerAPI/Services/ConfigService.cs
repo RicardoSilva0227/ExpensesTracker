@@ -43,6 +43,7 @@ namespace ExpenseTrackerAPI.Services
             existingConfigs.EnableMultiCurrency = entity.EnableMultiCurrency;
             existingConfigs.EnableDiscounts = entity.EnableDiscounts;
             existingConfigs.LastUpdated = DateTime.Today;
+            existingConfigs.DefaultCurrencyId = entity.DefaultCurrencyId;
 
             await _appDbContext.SaveChangesAsync();
             return existingConfigs;

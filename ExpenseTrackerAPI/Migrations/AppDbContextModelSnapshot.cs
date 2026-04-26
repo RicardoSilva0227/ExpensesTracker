@@ -219,7 +219,7 @@ namespace ExpenseTrackerAPI.Migrations
                     b.Property<int?>("ExpenseTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Tin")
+                    b.Property<int?>("Tin")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")

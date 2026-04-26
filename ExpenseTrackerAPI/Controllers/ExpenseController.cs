@@ -224,6 +224,7 @@ namespace ExpenseTrackerAPI.Controllers
         #endregion
 
         #region Imports and Exports
+        [HttpPost("ExportToFtp")]
         public async Task<ActionResult<APIResponse>> ExportToFtp(IFormFile file)
         {
             try
