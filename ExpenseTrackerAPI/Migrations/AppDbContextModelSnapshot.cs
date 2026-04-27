@@ -40,6 +40,12 @@ namespace ExpenseTrackerAPI.Migrations
                     b.Property<int?>("DefaultCurrencyId")
                         .HasColumnType("int");
 
+                    b.Property<int>("DefaultExportSetting")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DefaultPaginationSize")
+                        .HasColumnType("int");
+
                     b.Property<bool>("EnableDiscounts")
                         .HasColumnType("bit");
 
@@ -219,7 +225,7 @@ namespace ExpenseTrackerAPI.Migrations
                     b.Property<int?>("ExpenseTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Tin")
+                    b.Property<int?>("Tin")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")

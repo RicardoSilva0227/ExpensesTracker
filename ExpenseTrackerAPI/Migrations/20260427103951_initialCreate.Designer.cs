@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExpenseTrackerAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251210172623_add folder option to configs")]
-    partial class addfolderoptiontoconfigs
+    [Migration("20260427103951_initialCreate")]
+    partial class initialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,6 +41,12 @@ namespace ExpenseTrackerAPI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("DefaultCurrencyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DefaultExportSetting")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DefaultPaginationSize")
                         .HasColumnType("int");
 
                     b.Property<bool>("EnableDiscounts")
@@ -222,7 +228,7 @@ namespace ExpenseTrackerAPI.Migrations
                     b.Property<int?>("ExpenseTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Tin")
+                    b.Property<int?>("Tin")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
