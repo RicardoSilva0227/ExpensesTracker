@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 ExpenseTrackerAPI/appsettings.json
 # ExpenseTrackerAPI/Migrations
+/ExpenseTrackerAPI/appsettings.Development.json
+ExpenseTrackerAPI/Properties/ServiceDependencies/ExpenseTrackerWebApp - Web Deploy/profile.arm.json
