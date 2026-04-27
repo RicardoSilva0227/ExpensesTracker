@@ -16,8 +16,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 // Add services to the container.
-
-
 #region services
 builder.Services.AddControllers();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
@@ -37,7 +35,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
         policy =>
         {
-            policy.WithOrigins("http://localhost:4200") // Adjust based on your frontend URL
+            policy.WithOrigins("http://localhost:4200",
+                                "https://expense-tracker-of722pyyo-ricardosilvaa2002-8896s-projects.vercel.app/")
                   .AllowAnyMethod()
                   .AllowAnyHeader()
                   .AllowCredentials();
@@ -46,12 +45,8 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 // needs to use it globally
 app.UseCors(MyAllowSpecificOrigins);
