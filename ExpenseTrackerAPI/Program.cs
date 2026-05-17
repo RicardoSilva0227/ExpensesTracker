@@ -12,7 +12,7 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 // Register DbContext with SQL Server
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseNpgsql(connectionString));
 
 
 // Add services to the container.
