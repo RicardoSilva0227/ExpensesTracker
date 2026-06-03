@@ -203,10 +203,6 @@ namespace ExpenseTrackerAPI.Controllers
                     _response.ErrorMessages = new List<string> { "Expense not found." };
                     return NotFound(_response);
                 }
-
-                _response.StatusCode = HttpStatusCode.NoContent;
-                _response.IsSuccess = true;
-                return Ok(_response);
             }
             catch (Exception ex)
             {

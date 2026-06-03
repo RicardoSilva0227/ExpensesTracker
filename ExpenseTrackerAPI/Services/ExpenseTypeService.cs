@@ -14,7 +14,7 @@ namespace ExpenseTrackerAPI.Services
             _appDbContext = appDbContext;
         }
 
-        public async Task<ExpenseType> UpdateAsync(int id, ExpenseType entity)
+        public async Task<ExpenseType?> UpdateAsync(int id, ExpenseType entity)
         {
             var existingExpenseType = await _appDbContext.ExpenseTypes.FirstOrDefaultAsync(e => e.Id == id);
             if (existingExpenseType == null)

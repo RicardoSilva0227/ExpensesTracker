@@ -39,6 +39,6 @@ namespace ExpenseTrackerAPI.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal TotalSpent { get; set; } = 0;
 
-        public User User { get; set; }
+        public required User User { get; set; }
     }
 }

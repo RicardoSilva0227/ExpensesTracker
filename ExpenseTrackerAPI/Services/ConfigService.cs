@@ -15,12 +15,12 @@ namespace ExpenseTrackerAPI.Services
             _appDbContext = appDbContext;
         }
 
-        public async Task<Configs> GetFirstOrDefault()
+        public async Task<Configs?> GetFirstOrDefault()
         {
             return await _appDbContext.Configs.FirstOrDefaultAsync();
         }
 
-        public async Task<Configs> UpdateAsync(int id, Configs entity)
+        public async Task<Configs?> UpdateAsync(int id, Configs entity)
         {
             var existingConfigs = await _appDbContext.Configs.FirstOrDefaultAsync(e => e.Id == id);
             if (existingConfigs == null)
@@ -42,7 +42,7 @@ namespace ExpenseTrackerAPI.Services
             existingConfigs.DateFormat = entity.DateFormat;
             existingConfigs.EnableMultiCurrency = entity.EnableMultiCurrency;
             existingConfigs.EnableDiscounts = entity.EnableDiscounts;
-            existingConfigs.LastUpdated = DateTime.Today;
+            existingConfigs.LastUpdated = DateTime.UtcNow;
             existingConfigs.DefaultCurrencyId = entity.DefaultCurrencyId;
             existingConfigs.DefaultExportSetting = entity.DefaultExportSetting;
             existingConfigs.DefaultPaginationSize = entity.DefaultPaginationSize;
