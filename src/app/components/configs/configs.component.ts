@@ -135,6 +135,7 @@ export class ConfigsComponent implements OnInit {
             duration: 4000,
             panelClass: ['success-snackbar']
           });
+          redirectTo: this.router.navigate(['/dashboard'])
         }
       },
       error: (error) => {

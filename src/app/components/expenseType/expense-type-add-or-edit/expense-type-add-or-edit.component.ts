@@ -78,6 +78,8 @@ export class ExpenseTypeAddOrEditComponent {
               duration: 4000,
               panelClass: ['success-snackbar']
             });
+
+            this.goBack();
           }
         },
         error: (error) => {
@@ -96,6 +98,8 @@ export class ExpenseTypeAddOrEditComponent {
               panelClass: ['success-snackbar']
             });
           }
+
+          this.goBack();
         },
         error: (error) => {
           this.snackBar.open('Failed to add expense type.', 'Close', {
