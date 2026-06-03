@@ -125,6 +125,8 @@ export class ExpenseAddOrEditComponent implements OnInit {
               panelClass: ['success-snackbar']
             });
           }
+        
+          this.goBack();
         },
         error: (error) => {
           this.snackBar.open('Failed to update expense.', 'Close', {
