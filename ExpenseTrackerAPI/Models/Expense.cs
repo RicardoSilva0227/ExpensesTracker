@@ -15,7 +15,7 @@ namespace ExpenseTrackerAPI.Models
         /// <summary>
         /// Code of the invoice. It is created using the id, type of expense and date of emission
         /// </summary>
-        public string Code { get; set; }
+        public required string Code { get; set; }
         /// <summary>
         /// Tax Identification Number - NIF
         /// </summary>
@@ -37,7 +37,7 @@ namespace ExpenseTrackerAPI.Models
         /// <summary>
         /// date of when the expense was created on the database
         /// </summary>
-        public DateTime DateOfCreation { get; set; } = DateTime.Now;
+        public DateTime DateOfCreation { get; set; } = DateTime.UtcNow;
         /// <summary>
         /// Type of expense (foreign Key with ExpenseType)
         /// </summary>

@@ -10,22 +10,22 @@ namespace ExpenseTrackerAPI.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required]
-        public string Name { get; set; }        // e.g. "US Dollar"
+        public required string Name { get; set; }        // e.g. "US Dollar"
         [Required]
-        public string Acronym { get; set; }     // e.g. "USD"
+        public required  string Acronym { get; set; }     // e.g. "USD"
         [Required]
-        public string Symbol { get; set; }      // e.g. "$"
+        public required string Symbol { get; set; }      // e.g. "$"
         [Required]
         public int DecimalPlaces { get; set; }  // e.g. 2
         [Required]
-        public string CultureCode { get; set; } // e.g. "en-US"
+        public required string CultureCode { get; set; } // e.g. "en-US"
 
         // For conversions
         public decimal? ExchangeRateToBase { get; set; }
 
         // Dates
         [Required]
-        public DateTime DateOfCreation { get; set; } = DateTime.Now;
+        public DateTime DateOfCreation { get; set; } = DateTime.UtcNow;
         public DateTime? LastUpdated { get; set; }
 
         // Flags

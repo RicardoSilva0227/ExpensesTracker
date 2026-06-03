@@ -14,9 +14,9 @@ namespace ExpenseTrackerAPI.Services
             _appDbContext = appDbContext;
         }
 
-        public async Task<Wallet> GetWalletSummary(int id)
+        public async Task<Wallet?> GetWalletSummary(int id)
         {
-            var currentMonthStart = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            var currentMonthStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
             var nextMonthStart = currentMonthStart.AddMonths(1);
 
             var wallet = await _appDbContext.wallet

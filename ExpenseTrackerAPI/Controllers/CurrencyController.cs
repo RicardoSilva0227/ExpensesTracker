@@ -39,7 +39,7 @@ namespace ExpenseTrackerAPI.Controllers
                 currencyList = await _currencyService.GetAllAsync(pageSize, pageNumber);
 
                 Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
-                Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagination));
+                Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(pagination));
                 _response.result = currencyList;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -200,10 +200,6 @@ namespace ExpenseTrackerAPI.Controllers
                     _response.ErrorMessages = new List<string> { "Currency not found." };
                     return NotFound(_response);
                 }
-
-                _response.StatusCode = HttpStatusCode.NoContent;
-                _response.IsSuccess = true;
-                return Ok(_response);
             }
             catch (Exception ex)
             {
