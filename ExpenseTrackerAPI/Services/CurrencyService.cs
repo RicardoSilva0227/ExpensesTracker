@@ -14,7 +14,7 @@ namespace ExpenseTrackerAPI.Services
             _appDbContext = appDbContext;
         }
 
-        public async Task<Currency> UpdateAsync(int id, Currency entity)
+        public async Task<Currency?> UpdateAsync(int id, Currency entity)
         {
             var existingCurrency = await _appDbContext.Currency.FirstOrDefaultAsync(e => e.Id == id);
             if (existingCurrency == null)
@@ -27,7 +27,7 @@ namespace ExpenseTrackerAPI.Services
             existingCurrency.CultureCode = entity.CultureCode;
             existingCurrency.ExchangeRateToBase = entity.ExchangeRateToBase;
             existingCurrency.DateOfCreation = entity.DateOfCreation;
-            existingCurrency.LastUpdated = entity.LastUpdated;
+            existingCurrency.LastUpdated = DateTime.UtcNow;
             existingCurrency.IsDefault = entity.IsDefault;
             existingCurrency.IsCrypto = entity.IsCrypto;
             existingCurrency.Country = entity.Country;

@@ -17,14 +17,17 @@ namespace ExpenseTrackerAPI.Services
         }
 
         // need to alter this later for a less mistake prone version
-        public async Task<Expense> CheckExpenseDuplicate(Expense expense)
+        public async Task<Expense?> CheckExpenseDuplicate(Expense expense)
         {
-            return await _appDbContext.Set<Expense>().FirstOrDefaultAsync(e => e.Title == expense.Title &&
-                            e.Amount == expense.Amount &&
-                            e.DateOfEmission.Value.Date == expense.DateOfEmission.Value.Date);
+            return await _appDbContext.Set<Expense>().FirstOrDefaultAsync(e => 
+                e.Title == expense.Title &&
+                e.Amount == expense.Amount &&
+                e.DateOfEmission.HasValue && 
+                expense.DateOfEmission.HasValue &&
+                e.DateOfEmission.Value.Date == expense.DateOfEmission.Value.Date);
         }
 
-        public async Task<Expense> UpdateAsync(int id, Expense entity)
+        public async Task<Expense?> UpdateAsync(int id, Expense entity)
         {
             var existingExpense = await _appDbContext.Expenses.FirstOrDefaultAsync(e => e.Id == id);
             if (existingExpense == null)
@@ -32,7 +35,7 @@ namespace ExpenseTrackerAPI.Services
 
             existingExpense.Title = entity.Title;
             existingExpense.Amount = entity.Amount;
-            existingExpense.DateOfEmission = entity.DateOfEmission;
+            existingExpense.DateOfEmission = entity.DateOfEmission?.ToUniversalTime();
             existingExpense.ExpenseTypeId = entity.ExpenseTypeId;
             existingExpense.Tin = entity.Tin;
 

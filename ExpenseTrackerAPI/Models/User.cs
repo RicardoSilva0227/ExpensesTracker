@@ -34,7 +34,7 @@ namespace ExpenseTrackerAPI.Models
         /// date of when the expense was created on the database
         /// </summary>
         [Required]
-        public required DateTime DateOfCreation { get; set; } = DateTime.Now;
+        public required DateTime DateOfCreation { get; set; } = DateTime.UtcNow;
 
     }
 }

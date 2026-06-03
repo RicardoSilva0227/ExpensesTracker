@@ -40,9 +40,9 @@ namespace ExpenseTrackerAPI.Models
         public int ExpenseId { get; set; }
 
 
-        public ExpenseType ExpenseType { get; set; }
-        public Wallet wallet { get; set; }
-        public Expense expense { get; set; }
+        public ExpenseType? ExpenseType { get; set; }
+        public Wallet? Wallet { get; set; }
+        public Expense? Expense { get; set; }
 
     }
 }

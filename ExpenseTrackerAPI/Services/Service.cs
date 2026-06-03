@@ -49,7 +49,7 @@ namespace ExpenseTrackerAPI.Services
                         .ToListAsync();
         }
 
-        public async Task<T> GetAsync(Expression<Func<T, bool>> filter)
+        public async Task<T?> GetAsync(Expression<Func<T, bool>> filter)
         {
             return await _appDbContext.Set<T>().FirstOrDefaultAsync(filter);
         }

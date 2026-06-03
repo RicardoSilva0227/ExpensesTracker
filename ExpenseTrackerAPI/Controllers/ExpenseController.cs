@@ -39,10 +39,10 @@ namespace ExpenseTrackerAPI.Controllers
             try
             {
                 IEnumerable<Expense> expenseList;
-                expenseList = await _expensesService.GetAllAsync(pageSize, pageNumber, e => e.ExpenseType);
+                expenseList = await _expensesService.GetAllAsync(pageSize, pageNumber, e => e.ExpenseType!);
 
                 Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
-                Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagination));
+                Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(pagination));
                 _response.result = expenseList;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -114,6 +114,7 @@ namespace ExpenseTrackerAPI.Controllers
                 }
 
                 expense.Code = Guid.NewGuid().ToString(); // brainstorm how to make a code.
+                expense.DateOfEmission = expense.DateOfEmission?.ToUniversalTime();
 
                 var existingExpense = await _expensesService.CheckExpenseDuplicate(expense);
 
@@ -165,7 +166,7 @@ namespace ExpenseTrackerAPI.Controllers
                     return NotFound(_response);
                 }
 
-                _expensesService.DeleteAsync(expense);
+                await _expensesService.DeleteAsync(expense);
                 _response.StatusCode = HttpStatusCode.NoContent;
                 _response.IsSuccess = true;
                 return Ok(_response);
@@ -194,7 +195,7 @@ namespace ExpenseTrackerAPI.Controllers
                     return BadRequest(_response);
                 }
 
-                if (expense.Tin.ToString().Length != 9)
+                if (expense.Tin.HasValue && expense.Tin.Value.ToString().Length != 9)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.ErrorMessages = new List<string> { "The nif should be 9 characters!" };
@@ -224,43 +225,43 @@ namespace ExpenseTrackerAPI.Controllers
         #endregion
 
         #region Imports and Exports
-        [HttpPost("ExportToFtp")]
-        public async Task<ActionResult<APIResponse>> ExportToFtp(IFormFile file)
-        {
-            try
-            {
-                var config = _configService.GetFirstOrDefault();
+        // [HttpPost("ExportToFtp")]
+        // public async Task<ActionResult<APIResponse>> ExportToFtp(IFormFile file)
+        // {
+        //     try
+        //     {
+        //         var config = _configService.GetFirstOrDefault();
 
-                FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create(new Uri(config.Result.FtpServer));
-                ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
-                ftpRequest.Credentials = new NetworkCredential(config.Result.FtpUsername, config.Result.FtpPassword);
-                ftpRequest.UseBinary = true;
-                ftpRequest.ContentLength = file.Length;
-                ftpRequest.KeepAlive = false;
-                ftpRequest.UseBinary = true;
-                ftpRequest.UsePassive = true;
-                ftpRequest.EnableSsl = true;
+        //         FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create(new Uri(config.Result.FtpServer));
+        //         ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
+        //         ftpRequest.Credentials = new NetworkCredential(config.Result.FtpUsername, config.Result.FtpPassword);
+        //         ftpRequest.UseBinary = true;
+        //         ftpRequest.ContentLength = file.Length;
+        //         ftpRequest.KeepAlive = false;
+        //         ftpRequest.UseBinary = true;
+        //         ftpRequest.UsePassive = true;
+        //         ftpRequest.EnableSsl = true;
 
-                using (Stream request = ftpRequest.GetRequestStream())
-                using (Stream fileStream = file.OpenReadStream())
-                using (FtpWebResponse respose = (FtpWebResponse)ftpRequest.GetResponse())
-                {
-                    await fileStream.CopyToAsync(request);
-                    respose.Close();
-                }
+        //         using (Stream request = ftpRequest.GetRequestStream())
+        //         using (Stream fileStream = file.OpenReadStream())
+        //         using (FtpWebResponse respose = (FtpWebResponse)ftpRequest.GetResponse())
+        //         {
+        //             await fileStream.CopyToAsync(request);
+        //             respose.Close();
+        //         }
 
-                _response.StatusCode = HttpStatusCode.Continue;
-                _response.IsSuccess = true;
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.ErrorMessages = new List<string> { ex.Message };
-                _response.StatusCode = HttpStatusCode.InternalServerError;
-                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
-            }
-        }
+        //         _response.StatusCode = HttpStatusCode.Continue;
+        //         _response.IsSuccess = true;
+        //         return Ok(_response);
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         _response.IsSuccess = false;
+        //         _response.ErrorMessages = new List<string> { ex.Message };
+        //         _response.StatusCode = HttpStatusCode.InternalServerError;
+        //         return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+        //     }
+        // }
         #endregion
 
     }

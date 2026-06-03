@@ -4,6 +4,6 @@ namespace ExpenseTrackerAPI.Services.Interfaces
 {
     public interface IWalletService : IService<Wallet>
     {
-        Task<Wallet> GetWalletSummary(int id);
+        Task<Wallet?> GetWalletSummary(int id);
     }
 }
