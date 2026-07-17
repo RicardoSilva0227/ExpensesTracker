@@ -6,5 +6,6 @@ namespace ExpenseTrackerAPI.Services.Interfaces
     {
         Task<Expense?> CheckExpenseDuplicate(Expense entity);
         Task<Expense?> UpdateAsync(int id, Expense entity);
+        Task<Expense?> createExpenseAsync(Expense expense);
     }
 }

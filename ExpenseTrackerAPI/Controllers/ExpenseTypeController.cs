@@ -1,8 +1,5 @@
 ﻿using ExpenseTrackerAPI.Models;
-using ExpenseTrackerAPI.Models.Dto;
-using ExpenseTrackerAPI.Services;
 using ExpenseTrackerAPI.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text.Json;
@@ -55,12 +52,11 @@ namespace ExpenseTrackerAPI.Controllers
 
         /// <summary>
         /// Get One ExpenseType
-        /// </summary>
         /// <param name="id"> Id of the expensesType</param>
         /// <returns></returns>
         [HttpGet, Route("GetExpenseType")]
         //[Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExpenseDto))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<APIResponse>> GetExpenseType(int id)

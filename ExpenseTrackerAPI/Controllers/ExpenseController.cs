@@ -62,7 +62,7 @@ namespace ExpenseTrackerAPI.Controllers
         /// <returns></returns>
         //[Authorize]
         [HttpGet, Route("GetExpense")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExpenseDto))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<APIResponse>> GetExpense(int id)
@@ -126,7 +126,7 @@ namespace ExpenseTrackerAPI.Controllers
                 }
 
                 // Add the new expense
-                await _expensesService.CreateAsync(expense);
+                await _expensesService.createExpenseAsync(expense);
                 await _expensesService.SaveAsync();
 
                 _response.result = expense;

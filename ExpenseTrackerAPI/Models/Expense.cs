@@ -31,6 +31,10 @@ namespace ExpenseTrackerAPI.Models
         [Required]
         public required decimal Amount { get; set; }
         /// <summary>
+        /// Type of transaction (Income or Expense)
+        /// </summary>
+        public TransactionType TransactionType { get; set; }
+        /// <summary>
         /// Date when the invoice was emitted
         /// </summary>
         public DateTime? DateOfEmission { get; set; }
@@ -38,6 +42,8 @@ namespace ExpenseTrackerAPI.Models
         /// date of when the expense was created on the database
         /// </summary>
         public DateTime DateOfCreation { get; set; } = DateTime.UtcNow;
+
+
         /// <summary>
         /// Type of expense (foreign Key with ExpenseType)
         /// </summary>
@@ -45,5 +51,19 @@ namespace ExpenseTrackerAPI.Models
         public int? ExpenseTypeId { get; set; }
         public ExpenseType? ExpenseType { get; set; }
 
+
+        /// <summary>
+        /// Wallet this transaction affects
+        /// </summary>
+        [ForeignKey("Wallet")]
+        public int WalletId { get; set; }
+        public required Wallet Wallet { get; set; }
+
+    }
+
+    public enum TransactionType
+    {
+        Income = 0,
+        Expense = 1
     }
 }
