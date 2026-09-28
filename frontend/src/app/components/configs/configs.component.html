@@ -1,0 +1,190 @@
+<form *ngIf="configsForm" [formGroup]="configsForm" (ngSubmit)="onSubmit()">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Configuration</div>
+      <div class="page-subtitle">Manage your system and integration settings</div>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+  </div>
+
+  <!-- General Settings -->
+  <div class="card">
+    <div class="card-title">⚙️ General</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Timezone</label>
+        <select formControlName="timezone">
+          <option *ngFor="let option of timezones" [value]="option.value">{{ option.label }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Date Format</label>
+        <select formControlName="dateFormat">
+          <option *ngFor="let option of dateFormats" [value]="option.value">{{ option.label }}</option>
+          </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Default Pagination Size</label>
+        <select formControlName="defaultPaginationSize">
+          <option *ngFor="let option of paginationSizes" [value]="option.value">{{ option.label }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Default Export Settings (to be added)</label>
+        <select formControlName="defaultExportSetting">
+          <option *ngFor="let option of exportFormats" [value]="option.value">{{ option.label }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Invoice Delivery -->
+  <div class="card">
+    <div class="card-title">📨 Invoice Delivery</div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button type="button" class="tab" [class.active]="activeTab === 'ftp'" (click)="activeTab = 'ftp'">FTP</button>
+      <button type="button" class="tab" [class.active]="activeTab === 'email'"
+        (click)="activeTab = 'email'">Email</button>
+      <button type="button" class="tab" [class.active]="activeTab === 'folder'"
+        (click)="activeTab = 'folder'">Folder</button>
+    </div>
+
+    <!-- FTP Tab -->
+    <div *ngIf="activeTab === 'ftp'">
+      <div class="flex-center gap-md" style="margin-bottom: 1rem;">
+        <label class="toggle-label">
+          <span class="toggle">
+            <input type="checkbox" formControlName="useFtp" />
+            <span class="toggle-slider"></span>
+          </span>
+          Enable FTP
+        </label>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>FTP Server</label>
+          <input type="text" formControlName="ftpServer" placeholder="ftp://127.0.0.1" />
+        </div>
+        <div class="form-group">
+          <label>FTP Port</label>
+          <input type="number" formControlName="ftpPort" placeholder="21" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" formControlName="ftpUsername" />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" formControlName="ftpPassword" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Email Tab -->
+    <div *ngIf="activeTab === 'email'">
+      <div class="flex-center gap-md" style="margin-bottom: 1rem;">
+        <label class="toggle-label">
+          <span class="toggle">
+            <input type="checkbox" formControlName="useSmtp" />
+            <span class="toggle-slider"></span>
+          </span>
+          Enable Email
+        </label>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>SMTP Server</label>
+          <input type="text" formControlName="smtpServer" />
+        </div>
+        <div class="form-group">
+          <label>SMTP Port</label>
+          <input type="number" formControlName="smtpPort" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>SMTP Username</label>
+          <input type="text" formControlName="smtpUsername" />
+        </div>
+        <div class="form-group">
+          <label>SMTP Password</label>
+          <input type="password" formControlName="smtpPassword" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Folder Tab -->
+    <div *ngIf="activeTab === 'folder'">
+      <div class="flex-center gap-md" style="margin-bottom: 1rem;">
+        <label class="toggle-label">
+          <span class="toggle">
+            <input type="checkbox" formControlName="useFolder" />
+            <span class="toggle-slider"></span>
+          </span>
+          Enable Folder
+        </label>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Folder Path</label>
+          <input type="text" formControlName="folderAddress" placeholder="C:/folder" />
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- currency form -->
+  <div class="card">
+    <div class="card-title">
+      💶 Currency
+      <button type="button" class="btn btn-secondary btn-sm ml-auto" (click)="openCurrencyModal()">+ New
+        Currency</button>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Default Currency</label>
+        <select formControlName="defaultCurrencyId" id="defaultCurrencyId">
+          <option value="" disabled>Select a type</option>
+          <option *ngFor="let currency of currencies" [value]="currency.id">
+            {{ currency.name }} - {{ currency.acronym }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="flex-center gap-md">
+        <label class="toggle-label">
+          <span class="toggle">
+            <input type="checkbox" formControlName="enableMultiCurrency" />
+            <span class="toggle-slider"></span>
+          </span>
+          Enable Multi-Currency
+        </label>
+        <label class="toggle-label">
+          <span class="toggle">
+            <input type="checkbox" formControlName="enableDiscounts" />
+            <span class="toggle-slider"></span>
+          </span>
+          Enable Discounts
+        </label>
+      </div>
+    </div>
+
+  </div>
+</form>
+
+<!-- Currency Modal -->
+<div class="modal-backdrop" *ngIf="showCurrencyModal" (click)="closeCurrencyModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <app-currency-form (currencyCreated)="onCurrencyCreated()" (close)="closeCurrencyModal()">
+    </app-currency-form>
+  </div>

@@ -1,0 +1,48 @@
+<div class="page-header">
+  <div>
+    <div class="page-title">Expenses Types</div>
+    <div class="page-subtitle">Manage your expense Types</div>
+  </div>
+  <button type="button" class="btn btn-primary" (click)="SetEditExpenseType()">+ Add</button>
+</div>
+
+<div class="card">
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Description</th>
+          <th>Icon</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let expenseType of expenseTypes" [ngClass]="{'even-row': expenseType.id % 2 === 0}">
+          <td>{{ expenseType.code }}</td>
+          <td>{{ expenseType.description }}</td>
+          <td>{{ expenseType.icon }}</td>
+          <td><button class="btn-secondary" (click)="SetEditExpenseType(expenseType.id)">Edit</button> | <button
+              class="btn-danger" (click)="DeleteExpenseType(expenseType.id)">Delete</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="pagination">
+    <button class="btn btn-secondary btn-sm" (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
+    <span class="pagination-info">Page {{ currentPage }} of {{ totalPages }}</span>
+    <button class="btn btn-secondary btn-sm" (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+  </div>
+
+
+</div>
+
+
+<!-- <div class="pagination-controls">
+  <button (click)="prevPage()" [disabled]="pageNumber === 1" class="pagination-button">Previous</button>
+  <button (click)="nextPage()" class="pagination-button">Next</button>
+  <p class="pagination-info">Page: {{ pageNumber }}</p>
+</div> -->

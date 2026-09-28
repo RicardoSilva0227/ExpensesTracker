@@ -1,0 +1,22 @@
+<div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <h4>Upload Expenses (Caixa Geral)</h4>
+                <input type="file" class="file-upload" (change)="onFileSelected($event)">
+                <small style="color: red;">{{ importStatus }}</small>
+
+                <!-- Modal footer -->
+
+                <div class="modal-footer">
+                    <div class="button-group">
+                        <button (click)="importFile()">Import</button>
+                        <button>Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
