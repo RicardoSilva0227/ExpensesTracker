@@ -1,0 +1,45 @@
+<div class="app-layout">
+
+  <!-- ── Navbar ───────────────────────────────────────────────────────────── -->
+  <nav class="navbar">
+    <div class="logo">
+      💸 <span>ExpenseTracker</span>
+    </div>
+    <div class="navbar-right">
+      {{ today | date:'EEEE, d MMM yyyy' }}
+    </div>
+  </nav>
+
+  <!-- ── Sidebar ──────────────────────────────────────────────────────────── -->
+  <aside class="sidebar">
+
+    <span class="sidebar-section-label">Main</span>
+
+    <a class="nav-item" routerLink="/dashboard" routerLinkActive="active">
+      <span class="nav-icon">📊</span> Dashboard
+    </a>
+
+    <a class="nav-item" routerLink="/Expense/List" routerLinkActive="active">
+      <span class="nav-icon">💳</span> Expenses
+    </a>
+
+    <span class="sidebar-section-label">Management</span>
+
+    <a class="nav-item" routerLink="/ExpenseType/List" routerLinkActive="active">
+      <span class="nav-icon">🏷️</span> Expense Types
+    </a>
+
+    <span class="sidebar-section-label">System</span>
+
+    <a class="nav-item" routerLink="/Configs" routerLinkActive="active">
+      <span class="nav-icon">⚙️</span> Config
+    </a>
+
+  </aside>
+
+  <!-- ── Content ──────────────────────────────────────────────────────────── -->
+  <main class="content">
+    <router-outlet />
+  </main>
+
+</div>

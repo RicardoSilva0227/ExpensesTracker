@@ -1,0 +1,50 @@
+<div class="page-header">
+  <div>
+    <div class="page-title">Expenses</div>
+    <div class="page-subtitle">Manage your expenses</div>
+  </div>
+  <button type="button" class="btn btn-primary" (click)="SetEditExpense()">+ Add</button>
+</div>
+
+<div class="card">
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>amount</th>
+          <th>Expense Type</th>
+          <th>Tin / Nif</th>
+          <th>Date of Emission</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let expense of expenses">
+          <td>{{ expense.title }}</td>
+          <td>{{ expense.amount }} €</td>
+          <td>{{ expense.expenseType.code }}</td>
+          <td>{{ expense.tin }}</td>
+          <td>{{ expense.dateOfEmission | date:'yyyy-MM-dd'}}</td>
+          <td><button class="btn-secondary" (click)="SetEditExpense(expense.id)">Edit</button> | <button
+              class="btn-danger" (click)="DeleteExpense(expense.id)">Delete</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="pagination">
+  <button class="btn btn-secondary btn-sm" (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
+  <span class="pagination-info">Page {{ currentPage }} of {{ totalPages }}</span>
+  <button class="btn btn-secondary btn-sm" (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+</div>
+
+
+  <!-- <div class="pagination-controls">
+    <button (click)="prevPage()" [disabled]="pageNumber === 1" class="pagination-button">Previous</button>
+    <button (click)="nextPage()" class="pagination-button">Next</button>
+    <p class="pagination-info">Page: {{ pageNumber }}</p>
+  </div> -->
+
+</div>

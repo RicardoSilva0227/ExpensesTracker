@@ -1,0 +1,19 @@
+<nav>
+  <ul>
+    <li><a routerLink="/dashboard" routerLinkActive="active" ariaCurrentWhenActive="page">Dashboard</a></li>
+    <li class="dropdown">
+      <a routerLink="/expense/list" ariaCurrentWhenActive="page">Expenses</a>
+      <ul class="dropdown-menu">
+        <li><a (click)="openExportModal()">Export Expenses</a></li>        
+        <li><a routerLink="/expense/reports">Reports</a></li>
+      </ul>
+    </li>
+    <li><a routerLink="/expense/list" ariaCurrentWhenActive="page">ExpenseTypes</a></li>
+    <li  class="dropdown">
+      <a routerLink="/configs" routerLinkActive="active" ariaCurrentWhenActive="page">Configs</a>
+      <ul class="dropdown-menu">
+        <li><a routerLink="/configs/currencies/list">Currencies</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
