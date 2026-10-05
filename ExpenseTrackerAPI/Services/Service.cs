@@ -1,13 +1,7 @@
 ﻿using ExpenseTrackerAPI.Data;
-using ExpenseTrackerAPI.Models;
 using ExpenseTrackerAPI.Services.Interfaces;
-using Microsoft.AspNetCore.DataProtection.Repositories;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ExpenseTrackerAPI.Services
 {

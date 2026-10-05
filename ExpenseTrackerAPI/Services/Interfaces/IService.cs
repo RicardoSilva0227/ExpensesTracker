@@ -1,5 +1,4 @@
-﻿using ExpenseTrackerAPI.Models;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
 namespace ExpenseTrackerAPI.Services.Interfaces
 {
