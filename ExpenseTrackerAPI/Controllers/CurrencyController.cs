@@ -1,6 +1,4 @@
 ﻿using ExpenseTrackerAPI.Models;
-using ExpenseTrackerAPI.Models.Dto;
-using ExpenseTrackerAPI.Services;
 using ExpenseTrackerAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;

@@ -39,6 +39,11 @@ namespace ExpenseTrackerAPI.Models
         /// </summary>
         public DateTime DateOfCreation { get; set; } = DateTime.UtcNow;
         /// <summary>
+        /// Id of the wallet where the expense is stored. It is a foreign key with Wallets
+        /// </summary>
+        public int WalletId { get; set; }
+        
+        /// <summary>
         /// Type of expense (foreign Key with ExpenseType)
         /// </summary>
         [ForeignKey("ExpenseType")]

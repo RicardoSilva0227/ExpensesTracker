@@ -2,7 +2,6 @@
 using ExpenseTrackerAPI.Models;
 using ExpenseTrackerAPI.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace ExpenseTrackerAPI.Services
 {

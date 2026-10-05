@@ -1,8 +1,5 @@
 ﻿using ExpenseTrackerAPI.Models;
-using ExpenseTrackerAPI.Models.Dto;
 using ExpenseTrackerAPI.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text.Json;
@@ -14,13 +11,11 @@ namespace ExpenseTrackerAPI.Controllers
     public class ExpenseController : Controller
     {
         private readonly IExpenseService _expensesService;
-        private readonly IConfigService _configService;
         protected APIResponse _response;
 
         public ExpenseController(IExpenseService expensesService, IConfigService configService)
         {
             _expensesService = expensesService;
-            _configService = configService;
             _response = new();
         }
 
@@ -62,7 +57,7 @@ namespace ExpenseTrackerAPI.Controllers
         /// <returns></returns>
         //[Authorize]
         [HttpGet, Route("GetExpense")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExpenseDto))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<APIResponse>> GetExpense(int id)
@@ -114,6 +109,7 @@ namespace ExpenseTrackerAPI.Controllers
                 }
 
                 expense.Code = Guid.NewGuid().ToString(); // brainstorm how to make a code.
+                expense.WalletId = 3; // Wallets still not working.
                 expense.DateOfEmission = expense.DateOfEmission?.ToUniversalTime();
 
                 var existingExpense = await _expensesService.CheckExpenseDuplicate(expense);
